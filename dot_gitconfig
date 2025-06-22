@@ -1,0 +1,9 @@
+[user]
+	name = Althaf Muhammad
+	email = zoory9900@gmail.com
+[init]
+	defaultBranch = main
+[remote]
+	pushDefault = origin
+[pull]
+	rebase = true

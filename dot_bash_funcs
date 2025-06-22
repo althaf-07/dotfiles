@@ -1,0 +1,55 @@
+# Returns the private IP address assigned to this PC on the Wi-Fi network
+get-pc-wifi-ip() {
+  ip -4 addr show wlx00e02d2a2a31 | grep -oP 'inet\s\K192\.168\.\d+\.(?!255)\d+'
+}
+
+# Returns the private IP address of the Wi-Fi router (default gateway) this PC is connected to
+get-wifi-router-ip() {
+  ip route show dev wlx00e02d2a2a31 | grep default | awk '{print $3}'
+}
+
+# Returns the IP address of the phone on the Wi-Fi network
+# by matching the phone’s MAC address in the ARP table
+get-phone-ip-by-mac() {
+  local mac="${1:-4a:9d:d1:37:05:d7}"
+  ip neigh | grep -i "$mac" | awk '{print $1}' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+}
+
+# Connects to the phone over SSH from the PC
+# Assumes SSH server is running on the phone on port 8022 (e.g., SSHDroid)
+# If we didn't used hosts file here and used StrictHostKeyChecking=no, this will clutter our actual known_hosts file.
+# That is why we are creating one and using it
+connect-to-phone() {
+  ssh $PHONE_USER@$(get-phone-ip-by-mac) \
+    -p 8022 \
+    -o UserKnownHostsFile=~/.ssh/known_hosts-termux
+}
+
+mnt-phone() {
+  sshfs $PHONE_USER@$(get-phone-ip-by-mac):/storage/emulated/0 ~/mnt/phone \
+    -p 8022 \
+    -o UserKnownHostsFile=~/.ssh/known_hosts-termux \
+    -o uid=$(id -u) \
+    -o gid=$(id -g)
+}
+
+umnt-phone() {
+  fusermount -u ~/mnt/phone
+}
+
+empty-trash() {
+  shopt -s extglob dotglob
+  ( cd ~/trash && /bin/rm -rf !(.directory) )
+}
+
+apt-history() {
+    (zcat $(ls -tr /var/log/apt/history.log*.gz) 2>/dev/null; cat /var/log/apt/history.log) |
+    egrep '^(Start-Date:|Commandline:)' |
+    grep -v aptdaemon |
+    egrep '^Commandline:'
+}
+
+mcd() {
+  mkdir -p "$1"
+  cd "$1"
+}

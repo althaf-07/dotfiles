@@ -1,0 +1,62 @@
+# === System & Package Management ===
+alias u='sudo apt update && sudo apt upgrade -y'
+alias upd='sudo apt update'
+alias upg='sudo apt upgrade'
+alias cap='sudo apt autopurge && sudo apt autoclean'
+alias i='sudo apt install'
+alias r='sudo apt remove'
+
+# === Safety Overrides ===
+alias mv='mv -i'
+alias cp='cp -i'
+alias rm="echo Use 'del', or the full path i.e. '/bin/rm'"
+alias del='/bin/rm -i'
+
+# === Development Tools ===
+alias v='vim'
+alias py='python3'
+alias bat='batcat'
+alias duc='diff -u --color'
+alias src='source ~/.bashrc'
+alias dco='devcontainer open .'
+alias uvr='uv run'
+alias uv-tool-upgrade-all="uv tool upgrade cookiecutter-data-science dvc gdown ruff yt-dlp"
+
+# === Navigation ===
+alias ..='cd ..'            # One level up
+alias ...='cd ../..'        # Two levels up
+alias ....='cd ../../..'    # Three levels up
+alias -- -='cd -'           # Go to previous directory
+alias c='clear'
+
+# === Python Environments ===
+alias workon='source .venv/bin/activate'
+alias workof='deactivate'
+
+# === KDE Connect ===
+alias kcr='kdeconnect-cli --refresh'
+
+# === Screenshot Sync ===
+alias ss-sync='mv ~/phone/DCIM/Screenshots/* ~/images/screenshots/'
+
+# === View Last Log ===
+alias vll='latest=$(eza -rs created logs/ | head -n 1); echo "==> Showing: logs/$latest"; bat logs/$latest'
+
+# === Git Aliases ===
+alias a='git add'
+alias ci='git commit'
+alias s='git -c color.status=always status'
+alias b='git branch'
+alias lg='git log'
+alias co='git checkout'
+alias grm='git rm'
+alias gmv='git mv'
+alias df='git diff'
+alias bl='git blame'
+alias pushom='git push origin main'
+alias pullom='git pull origin main'
+alias pullupm='git pull upstream main'
+
+# === Shortcuts ===
+alias t='trash'
+alias x='exit'

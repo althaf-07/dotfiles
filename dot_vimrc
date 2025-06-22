@@ -1,0 +1,101 @@
+" ==========================
+" BASIC SETTINGS
+" ==========================
+set number                       " Show line numbers
+set background=light            " Use light background
+syntax on                       " Enable syntax highlighting
+
+" ==========================
+" INDENTATION
+" ==========================
+set autoindent                  " Keep indent from previous line
+set smartindent                 " Language-aware indentation
+set expandtab                   " Use spaces instead of tabs
+set shiftwidth=4                " Indent width = 4 spaces
+set tabstop=4                   " Tab character = 4 spaces
+set softtabstop=4               " Tab key inserts 4 spaces
+
+" ==========================
+" FILETYPE DETECTION & SETTINGS
+" ==========================
+filetype plugin indent on       " Enable filetype detection
+
+augroup custom_filetypes
+  autocmd!
+  " File-specific indentation
+  autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd FileType yaml   setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
+
+  " Set filetype manually for specific files
+  autocmd BufRead,BufNewFile .bash_configs,.bash_funcs set filetype=sh
+augroup END
+
+" ==========================
+" COLORS
+" ==========================
+try
+  colorscheme wildcharm
+catch
+  colorscheme default
+endtry
+
+" ==========================
+" AUTO-PAIRS (LIGHTWEIGHT)
+" ==========================
+inoremap ( ()<Left>
+inoremap [ []<Left>
+inoremap { {}<Left>
+inoremap ' ''<Left>
+inoremap " ""<Left>
+
+" ==========================
+" LINE MOVEMENT (NORMAL MODE)
+" ==========================
+function! s:swap_lines(n1, n2)
+  let line1 = getline(a:n1)
+  let line2 = getline(a:n2)
+  call setline(a:n1, line2)
+  call setline(a:n2, line1)
+endfunction
+
+function! s:swap_up()
+  let n = line('.')
+  if n == 1
+    return
+  endif
+  call s:swap_lines(n, n - 1)
+  execute n - 1
+endfunction
+
+function! s:swap_down()
+  let n = line('.')
+  if n == line('$')
+    return
+  endif
+  call s:swap_lines(n, n + 1)
+  execute n + 1
+endfunction
+
+noremap <silent> <A-up>   :call <SID>swap_up()<CR>
+noremap <silent> <A-down> :call <SID>swap_down()<CR>
+
+nnoremap <F5> :w<CR>:!python3 %<CR>
+
+" ==========================
+" LINE MOVEMENT (VISUAL MODE)
+" ==========================
+" xnoremap <A-j> :m '>+1<CR>gv=gv
+" xnoremap <A-k> :m '<-2<CR>gv=gv
+
+" ==========================
+" CLIPBOARD (OPTIONAL - WAYLAND)
+" ==========================
+" Uncomment if using wl-copy / wl-paste
+" autocmd TextYankPost * if (v:event.operator == 'y' || v:event.operator == 'd') | silent! execute 'call system("wl-copy", @")' | endif
+" nnoremap p :let @"=substitute(system("wl-paste --no-newline"), '<C-v><C-m>', '', 'g')<CR>p
+
+" ==========================
+" MOUSE (OPTIONAL)
+" ==========================
+" set mouse=           " Disable mouse entirely
+" set mouse=a          " Enable mouse in all modes
