@@ -118,12 +118,74 @@ fi
 
 # ---
 
-# Source Bash Configurations
-if [ -f ~/.bash_configs ]; then
-    . ~/.bash_configs
-fi
-
 # Source Bash Functions
 if [ -f ~/.bash_funcs ]; then
     . ~/.bash_funcs
 fi
+
+# History Settings
+HISTSIZE=100000
+HISTFILESIZE=10000000
+HISTTIMEFORMAT="%d-%m-%y %T "
+PROMPT_COMMAND="history -a; history -n"
+HISTIGNORE="\
+cd:\
+pwd:\
+clear:\
+exit:\
+bg:\
+fg:\
+history:\
+v:\
+vi:\
+vim:\
+code:\
+ls:\
+ll:\
+ls -a:\
+ls -l:\
+ls -al:\
+ls -la:\
+..:\
+sudo apt update:\
+sudo apt upgrade:\
+c:\
+x:\
+u"
+
+# Shell Options
+shopt -s histreedit histverify globstar
+
+# Add trailing slash to symlinked directories in autocomplete
+bind 'set mark-symlinked-directories on'
+
+# Environment Variables
+export PHONE_USER="u0_a1103"
+export GITHUB_USER="althaf-07"
+export DOCKER_USER="althaf07"
+export EDITOR="vim"
+export VISUAL="vim"
+# Git Prompt (show branch). This will automatically handle the check. Meaning, if not in a Git directory, this will not run.
+if type __git_ps1 &>/dev/null; then
+    PS1="${PS1::-3}\$(__git_ps1 \" (\[\033[01;31m\]%s\[\033[00m\])\")\$ "
+fi
+
+# Git Completion
+if [ -f /usr/share/bash-completion/completions/git ]; then
+    . /usr/share/bash-completion/completions/git
+    __git_complete a _git_add
+    __git_complete ci _git_commit
+    __git_complete s _git_status
+    __git_complete b _git_branch
+    __git_complete co _git_checkout
+    __git_complete grm _git_rm
+    __git_complete gmv _git_mv
+    __git_complete df _git_diff
+    __git_complete pushom _git_push
+    __git_complete pullom _git_pull
+    __git_complete pullupm _git_pull
+fi
+
+# Shell Completions for Tools
+eval "$(uv generate-shell-completion bash)"
+eval "$(uvx --generate-shell-completion bash)"

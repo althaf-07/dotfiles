@@ -39,7 +39,7 @@ umnt-phone() {
 
 empty-trash() {
   shopt -s extglob dotglob
-  ( cd ~/trash && /bin/rm -rf !(.directory) )
+  ( cd ~/trash && rm -rf !(.directory) )
 }
 
 apt-history() {
