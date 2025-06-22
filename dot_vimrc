@@ -1,24 +1,21 @@
-" ==========================
-" BASIC SETTINGS
-" ==========================
-set number                       " Show line numbers
-set background=light            " Use light background
-syntax on                       " Enable syntax highlighting
+set number                 " Show line numbers
+set background=light       " Use light background
+syntax on                  " Enable syntax highlighting
+filetype plugin indent on  " Enable filetype detection
 
-" ==========================
-" INDENTATION
-" ==========================
-set autoindent                  " Keep indent from previous line
-set smartindent                 " Language-aware indentation
-set expandtab                   " Use spaces instead of tabs
-set shiftwidth=4                " Indent width = 4 spaces
-set tabstop=4                   " Tab character = 4 spaces
-set softtabstop=4               " Tab key inserts 4 spaces
+try
+  colorscheme wildcharm
+catch
+  colorscheme default
+endtry
 
-" ==========================
-" FILETYPE DETECTION & SETTINGS
-" ==========================
-filetype plugin indent on       " Enable filetype detection
+" Indentation 
+set autoindent     " Keep indent from previous line
+set smartindent    " Language-aware indentation
+set expandtab      " Use spaces instead of tabs
+set shiftwidth=4   " Indent width = 4 spaces
+set tabstop=4      " Tab character = 4 spaces
+set softtabstop=4  " Tab key inserts 4 spaces
 
 augroup custom_filetypes
   autocmd!
@@ -27,30 +24,17 @@ augroup custom_filetypes
   autocmd FileType yaml   setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
 
   " Set filetype manually for specific files
-  autocmd BufRead,BufNewFile .bash_configs,.bash_funcs set filetype=sh
+  autocmd BufRead,BufNewFile .bash_funcs set filetype=sh
 augroup END
 
-" ==========================
-" COLORS
-" ==========================
-try
-  colorscheme wildcharm
-catch
-  colorscheme default
-endtry
-
-" ==========================
-" AUTO-PAIRS (LIGHTWEIGHT)
-" ==========================
+" Auto-pairs 
 inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
 inoremap ' ''<Left>
 inoremap " ""<Left>
 
-" ==========================
-" LINE MOVEMENT (NORMAL MODE)
-" ==========================
+" Move lines up and down
 function! s:swap_lines(n1, n2)
   let line1 = getline(a:n1)
   let line2 = getline(a:n2)
@@ -79,23 +63,5 @@ endfunction
 noremap <silent> <A-up>   :call <SID>swap_up()<CR>
 noremap <silent> <A-down> :call <SID>swap_down()<CR>
 
+" Run Python file with F5
 nnoremap <F5> :w<CR>:!python3 %<CR>
-
-" ==========================
-" LINE MOVEMENT (VISUAL MODE)
-" ==========================
-" xnoremap <A-j> :m '>+1<CR>gv=gv
-" xnoremap <A-k> :m '<-2<CR>gv=gv
-
-" ==========================
-" CLIPBOARD (OPTIONAL - WAYLAND)
-" ==========================
-" Uncomment if using wl-copy / wl-paste
-" autocmd TextYankPost * if (v:event.operator == 'y' || v:event.operator == 'd') | silent! execute 'call system("wl-copy", @")' | endif
-" nnoremap p :let @"=substitute(system("wl-paste --no-newline"), '<C-v><C-m>', '', 'g')<CR>p
-
-" ==========================
-" MOUSE (OPTIONAL)
-" ==========================
-" set mouse=           " Disable mouse entirely
-" set mouse=a          " Enable mouse in all modes
